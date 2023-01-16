@@ -12,6 +12,7 @@ import {
   filter,
   share,
   shareReplay,
+  take,
 } from 'rxjs/operators';
 
 const keyword$ = fromEvent(document.querySelector('#keyword'), 'input').pipe(
@@ -32,10 +33,9 @@ keyword$
     domUtils.fillAutoSuggestions(suggestions);
   });
 
-
 fromEvent(document.querySelector('#search'), 'click')
   .pipe(
-    switchMap(() => keyword$),
+    switchMap(() => keyword$.pipe(take(1))),
     switchMap((keyword) => {
       return dataUtils.getSearchResult(keyword);
     })
