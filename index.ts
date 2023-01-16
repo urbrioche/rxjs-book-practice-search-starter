@@ -9,3 +9,9 @@ import { map } from 'rxjs/operators';
 const keyword$ = fromEvent(document.querySelector('#keyword'), 'input').pipe(
   map((event) => (event.target as HTMLInputElement).value)
 );
+
+keyword$.subscribe((keyword) => {
+  dataUtils.getSuggestions(keyword).subscribe((suggestions) => {
+    domUtils.fillAutoSuggestions(suggestions);
+  });
+});
