@@ -4,14 +4,18 @@ import * as domUtils from './dom-utils';
 // 存取 API 資料的程式碼
 import * as dataUtils from './data-utils';
 import { fromEvent } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 const keyword$ = fromEvent(document.querySelector('#keyword'), 'input').pipe(
   map((event) => (event.target as HTMLInputElement).value)
 );
 
-keyword$.subscribe((keyword) => {
-  dataUtils.getSuggestions(keyword).subscribe((suggestions) => {
+keyword$
+  .pipe(
+    switchMap((keyword) => {
+      return dataUtils.getSuggestions(keyword);
+    })
+  )
+  .subscribe((suggestions) => {
     domUtils.fillAutoSuggestions(suggestions);
   });
-});
