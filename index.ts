@@ -29,12 +29,11 @@ keyword$
     domUtils.fillAutoSuggestions(suggestions);
   });
 
+// 不會動
 fromEvent(document.querySelector('#search'), 'click')
   .pipe(
-    switchMap(() => {
-      const keyword = (document.querySelector('#keyword') as HTMLInputElement)
-        .value;
-
+    switchMap(() => keyword$),
+    switchMap((keyword) => {
       return dataUtils.getSearchResult(keyword);
     })
   )
