@@ -28,3 +28,11 @@ keyword$
   .subscribe((suggestions) => {
     domUtils.fillAutoSuggestions(suggestions);
   });
+
+fromEvent(document.querySelector('#search'), 'click').subscribe(() => {
+  const keyword = (document.querySelector('#keyword') as HTMLInputElement)
+    .value;
+  dataUtils
+    .getSearchResult(keyword)
+    .subscribe((result) => domUtils.fillSearchResult(result));
+});
