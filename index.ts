@@ -13,10 +13,12 @@ import {
   share,
   shareReplay,
   take,
+  startWith,
 } from 'rxjs/operators';
 
 const keyword$ = fromEvent(document.querySelector('#keyword'), 'input').pipe(
   map((event) => (event.target as HTMLInputElement).value),
+  startWith(''),
   shareReplay(1)
 );
 
@@ -36,6 +38,7 @@ keyword$
 fromEvent(document.querySelector('#search'), 'click')
   .pipe(
     switchMap(() => keyword$.pipe(take(1))),
+    filter((keyword) => !!keyword),
     switchMap((keyword) => {
       return dataUtils.getSearchResult(keyword);
     })
