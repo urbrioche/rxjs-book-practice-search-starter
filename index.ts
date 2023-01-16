@@ -10,10 +10,13 @@ import {
   debounceTime,
   distinctUntilChanged,
   filter,
+  share,
+  shareReplay,
 } from 'rxjs/operators';
 
 const keyword$ = fromEvent(document.querySelector('#keyword'), 'input').pipe(
-  map((event) => (event.target as HTMLInputElement).value)
+  map((event) => (event.target as HTMLInputElement).value),
+  shareReplay(1)
 );
 
 keyword$
@@ -29,7 +32,7 @@ keyword$
     domUtils.fillAutoSuggestions(suggestions);
   });
 
-// 不會動
+
 fromEvent(document.querySelector('#search'), 'click')
   .pipe(
     switchMap(() => keyword$),
